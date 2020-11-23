@@ -6,7 +6,7 @@
   <br>
 
   <a href="#">
-    <img src="https://img.shields.io/badge/Latest%20Version-v3.6.2-7289da?style=for-the-badge&logo=data:image/gif;base64,R0lGODlhGAAYAPcAAAAAADQ+Yj5MdThCaEFOekNQfWt5e1lqfEdVhVpriVx1iVtsnFZpll1xlF1znFx5mGNtjGR7hWNzjGd5iWJunGNslmN0lGl1lGN5lWt7lWR0nGp1nWR5nGt8nHJ9l3J9jFxto1xtqlZqqF5zpF15pV10rVx5q1Z2ql1us150s114sV50uVd1smJupGNurGN0pGp1pGR6o2t7o2F0rml0rGR5rGt8q3J9pGNus2Fvu2Bzs2p2smR5s2t7tGF0u2N6vGp7u2l1uXJ+uGJ1wWV7w2l+xWl+yl5zwHWDiWyCmHODnHiGmHSLkW2CpGuEqnSCpHqMo3ODrHWKrXyMq3iHp3yTqGyEtWqFunKDs3uLtHSGvXSMvHuMu3eItnyTs3yTu3iUuW+RsV+ApmuCxG2Dy22LxnSMxHuMxHGGzXSLzXqLzXWFxXyTw3uSy3WSx26E0W+N2m+L1XKG03SL1XmL1HOL2HmL23WF2XiS1m+QyHOK4XmL4XaH4nGM5ImXm4WOlJSjnoOOq4OOpYSUrImXqJOcqYONt4OUtIybtIOUu4ycvImYt5OcuIyiqZekqYyiupOjvJurvJimtp+yvqKruae2ua23trLCucPHvIOMxoOUxIuaw4eYyJKbyISW1YiW0o2kyJWlxJqpxZWkzJury5aoxp6xxZ2zyZio1Jyy2Yuk0aOsyKOyxKOzzKy8zKq2yLO7xqOr1KSz1Ku706W026y73Ki21bK716u75LS95KSu4Zyx6bPDzLjGx63B2LPD1LTE3LvL3brI17/S2bbKzrTE47rF47zM5L3M67bH577R5L7R67zK8rjM8MLM3MPK1sTT3crU3MjW2dLZ2srUy8PN5MTO68nP68jL48TS5MnT5cbR68jS7M3b7Mva5dTb6MTO8srO8szF8MXR8snS8c3a8cnY+NXb9tDL7dnm6dzk8tro99Pq9uTp6+r17fr77eTr/efr+Oz09OXz/Ov0/e37/uj39fX19fX89fz+9vP1/fX9/f7//vr2/ODl4sK75yH5BAEAAAAALAAAAAAYABgAAAj/AAEAmFOnoMGDCAvGmRNHYMKHEOdIhEgRIcGKGDMeTJVO00WNBj194/frFik5IOvgqdaP371N26xpefORYq57/HI+s7Vtmy0eKCmmapcz575FPXt+SfHmociiRae1SroNWIoVTQ2uxAk15yJg1awl7ZSCaUE82uRxhTpt1TNXq0Ip2pSobIqCc0iVoqsI0ipXr1bhywfVXxYdiA3Sourz2dqc8lbNQJz4bDWqix73E7ZjhgrKOjYmvfWLbZcZqCdTPjjHGLdtibi2U5Q6NWiEqqq64ifvVe3at1nX2tTuWQ/QyIMfxHOGi+rkyeMklPMDuvWaBqlbj469IPUU2ykPCOw+53t4AAEBADs=">
+    <img src="https://img.shields.io/badge/Latest%20Version-v3.7.12-7289da?style=for-the-badge&logo=data:image/gif;base64,R0lGODlhGAAYAPcAAAAAADQ+Yj5MdThCaEFOekNQfWt5e1lqfEdVhVpriVx1iVtsnFZpll1xlF1znFx5mGNtjGR7hWNzjGd5iWJunGNslmN0lGl1lGN5lWt7lWR0nGp1nWR5nGt8nHJ9l3J9jFxto1xtqlZqqF5zpF15pV10rVx5q1Z2ql1us150s114sV50uVd1smJupGNurGN0pGp1pGR6o2t7o2F0rml0rGR5rGt8q3J9pGNus2Fvu2Bzs2p2smR5s2t7tGF0u2N6vGp7u2l1uXJ+uGJ1wWV7w2l+xWl+yl5zwHWDiWyCmHODnHiGmHSLkW2CpGuEqnSCpHqMo3ODrHWKrXyMq3iHp3yTqGyEtWqFunKDs3uLtHSGvXSMvHuMu3eItnyTs3yTu3iUuW+RsV+ApmuCxG2Dy22LxnSMxHuMxHGGzXSLzXqLzXWFxXyTw3uSy3WSx26E0W+N2m+L1XKG03SL1XmL1HOL2HmL23WF2XiS1m+QyHOK4XmL4XaH4nGM5ImXm4WOlJSjnoOOq4OOpYSUrImXqJOcqYONt4OUtIybtIOUu4ycvImYt5OcuIyiqZekqYyiupOjvJurvJimtp+yvqKruae2ua23trLCucPHvIOMxoOUxIuaw4eYyJKbyISW1YiW0o2kyJWlxJqpxZWkzJury5aoxp6xxZ2zyZio1Jyy2Yuk0aOsyKOyxKOzzKy8zKq2yLO7xqOr1KSz1Ku706W026y73Ki21bK716u75LS95KSu4Zyx6bPDzLjGx63B2LPD1LTE3LvL3brI17/S2bbKzrTE47rF47zM5L3M67bH577R5L7R67zK8rjM8MLM3MPK1sTT3crU3MjW2dLZ2srUy8PN5MTO68nP68jL48TS5MnT5cbR68jS7M3b7Mva5dTb6MTO8srO8szF8MXR8snS8c3a8cnY+NXb9tDL7dnm6dzk8tro99Pq9uTp6+r17fr77eTr/efr+Oz09OXz/Ov0/e37/uj39fX19fX89fz+9vP1/fX9/f7//vr2/ODl4sK75yH5BAEAAAAALAAAAAAYABgAAAj/AAEAmFOnoMGDCAvGmRNHYMKHEOdIhEgRIcGKGDMeTJVO00WNBj194/frFik5IOvgqdaP371N26xpefORYq57/HI+s7Vtmy0eKCmmapcz575FPXt+SfHmociiRae1SroNWIoVTQ2uxAk15yJg1awl7ZSCaUE82uRxhTpt1TNXq0Ip2pSobIqCc0iVoqsI0ipXr1bhywfVXxYdiA3Sourz2dqc8lbNQJz4bDWqix73E7ZjhgrKOjYmvfWLbZcZqCdTPjjHGLdtibi2U5Q6NWiEqqq64ifvVe3at1nX2tTuWQ/QyIMfxHOGi+rkyeMklPMDuvWaBqlbj469IPUU2ykPCOw+53t4AAEBADs=">
   </a>
 
   <br>
@@ -16,7 +16,7 @@
   </a>
 
   <a href="https://github.com/kyb3r/modmail/">
-    <img src="https://api.logviewer.tech/badges/instances.svg" alt="Bot instances">
+    <img src="https://api.modmail.dev/badges/instances.svg" alt="Bot instances">
   </a>
 
   <a href="https://discord.gg/j5e9p8w">
@@ -54,7 +54,7 @@ This bot is free for everyone and always will be. If you like this project and w
 
 When a member sends a direct message to the bot, Modmail will create a channel or "thread" into a designated category. All further DM messages will automatically relay to that channel; any available staff can respond within the channel.
 
-Our Logviewer will save the threads so you can view previous threads through their corresponding log link. Here is an [**example**](https://logs.logviewer.tech/example).
+Our Logviewer will save the threads so you can view previous threads through their corresponding log link. Here is an [**example**](https://logs.modmail.dev/example).
 
 ## Features
 
@@ -67,7 +67,7 @@ Our Logviewer will save the threads so you can view previous threads through the
   * Minimum length for members to be in the guild before allowed to contact Modmail (`guild_age`). 
 
 * **Advanced Logging Functionality:**
-  * When you close a thread, Modmail will generate a [log link](https://logs.logviewer.tech/example) and post it to your log channel.
+  * When you close a thread, Modmail will generate a [log link](https://logs.modmail.dev/example) and post it to your log channel.
   * Native Discord dark-mode feel.
   * Markdown/formatting support.
   * Login via Discord to protect your logs ([premium Patreon feature](https://patreon.com/kyber)).
@@ -181,6 +181,12 @@ Plugins requests and support is available in our [Modmail Plugins Server](https:
 
 ## Contributing
 
-Contributions to Modmail are always welcome, whether it be improvements to the documentation or new functionality, please feel free to make the change. Check out our [contributing guidelines](https://github.com/kyb3r/modmail/blob/master/CONTRIBUTING.md) before you get started.
+Contributions to Modmail are always welcome, whether it be improvements to the documentation or new functionality, please feel free to make the change. Check out our [contributing guidelines](https://github.com/kyb3r/modmail/blob/master/.github/CONTRIBUTING.md) before you get started.
 
 If you like this project and would like to show your appreciation, support us on **[Patreon](https://www.patreon.com/kyber)**!
+
+## Beta Testing
+
+Our [development](https://github.com/kyb3r/modmail/tree/development) branch is where most of our features are tested before public release. Be warned that there could be bugs in various commands so keep it away from any large servers you manage.
+
+If you wish to test the new features and play around with them, feel free to join our [Public Test Server](https://discord.gg/v5hTjKC). Bugs can be raised within that server or in our Github issues (state that you are using the development branch though).

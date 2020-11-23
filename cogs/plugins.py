@@ -145,6 +145,9 @@ class Plugins(commands.Cog):
                 continue
 
         logger.debug("Finished loading all plugins.")
+
+        self.bot.dispatch("plugins_ready")
+
         self._ready_event.set()
         await self.bot.config.update()
 
@@ -166,6 +169,17 @@ class Plugins(commands.Cog):
             async with self.bot.session.get(plugin.url, headers=headers) as resp:
                 logger.debug("Downloading %s.", plugin.url)
                 raw = await resp.read()
+
+                try:
+                    raw = await resp.text()
+                except UnicodeDecodeError:
+                    pass
+                else:
+                    if raw == "Not Found":
+                        raise InvalidPluginError("Plugin not found")
+                    else:
+                        raise InvalidPluginError("Invalid download recieved, non-bytes object")
+
                 plugin_io = io.BytesIO(raw)
                 if not plugin.cache_path.parent.exists():
                     plugin.cache_path.parent.mkdir(parents=True)
@@ -233,6 +247,14 @@ class Plugins(commands.Cog):
             raise InvalidPluginError("Cannot load extension, plugin invalid.") from exc
 
     async def parse_user_input(self, ctx, plugin_name, check_version=False):
+
+        if not self.bot.config["enable_plugins"]:
+            embed = discord.Embed(
+                description="Plugins are disabled, enable them by setting `ENABLE_PLUGINS=true`",
+                color=self.bot.main_color,
+            )
+            await ctx.send(embed=em)
+            return
 
         if not self._ready_event.is_set():
             embed = discord.Embed(
@@ -321,11 +343,11 @@ class Plugins(commands.Cog):
 
         try:
             await self.download_plugin(plugin, force=True)
-        except Exception:
+        except Exception as e:
             logger.warning("Unable to download plugin %s.", plugin, exc_info=True)
 
             embed = discord.Embed(
-                description="Failed to download plugin, check logs for error.",
+                description=f"Failed to download plugin, check logs for error.\n{type(e)}: {e}",
                 color=self.bot.error_color,
             )
 
@@ -340,11 +362,11 @@ class Plugins(commands.Cog):
 
             try:
                 await self.load_plugin(plugin)
-            except Exception:
+            except Exception as e:
                 logger.warning("Unable to load plugin %s.", plugin, exc_info=True)
 
                 embed = discord.Embed(
-                    description="Failed to download plugin, check logs for error.",
+                    description=f"Failed to download plugin, check logs for error.\n{type(e)}: {e}",
                     color=self.bot.error_color,
                 )
 

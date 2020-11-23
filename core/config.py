@@ -12,9 +12,9 @@ import discord
 from discord.ext.commands import BadArgument
 
 from core._color_data import ALL_COLORS
-from core.models import InvalidConfigError, Default, getLogger
+from core.models import DMDisabled, InvalidConfigError, Default, getLogger
 from core.time import UserFriendlyTimeSync
-from core.utils import strtobool
+from core.utils import strtobool, tryint
 
 logger = getLogger(__name__)
 load_dotenv()
@@ -39,8 +39,11 @@ class ConfigManager:
         "thread_cooldown": isodate.Duration(),
         "reply_without_command": False,
         "anon_reply_without_command": False,
+        "plain_reply_without_command": False,
         # logging
         "log_channel_id": None,
+        "mention_channel_id": None,
+        "update_channel_id": None,
         # threads
         "sent_emoji": "✅",
         "blocked_emoji": "🚫",
@@ -51,6 +54,7 @@ class ConfigManager:
         "thread_auto_close_response": "This thread has been closed automatically due to inactivity after {timeout}.",
         "thread_creation_response": "The staff team will get back to you as soon as possible.",
         "thread_creation_footer": "Your message has been sent",
+        "thread_contact_silently": False,
         "thread_self_closable_creation_footer": "Click the lock to close the thread",
         "thread_creation_title": "Thread Created",
         "thread_close_footer": "Replying will create a new thread",
@@ -59,13 +63,21 @@ class ConfigManager:
         "thread_self_close_response": "You have closed this Modmail thread.",
         "thread_move_title": "Thread Moved",
         "thread_move_notify": False,
+        "thread_move_notify_mods": False,
         "thread_move_response": "This thread has been moved.",
+        "cooldown_thread_title": "Message not sent!",
+        "cooldown_thread_response": "You must wait for {delta} before you can contact me again.",
         "disabled_new_thread_title": "Not Delivered",
         "disabled_new_thread_response": "We are not accepting new threads.",
         "disabled_new_thread_footer": "Please try again later...",
         "disabled_current_thread_title": "Not Delivered",
         "disabled_current_thread_response": "We are not accepting any messages.",
         "disabled_current_thread_footer": "Please try again later...",
+        "transfer_reactions": True,
+        "close_on_leave": False,
+        "close_on_leave_reason": "The recipient has left the server.",
+        "alert_on_mention": False,
+        "show_timestamp": True,
         # moderation
         "recipient_color": str(discord.Color.gold()),
         "mod_color": str(discord.Color.green()),
@@ -74,6 +86,17 @@ class ConfigManager:
         "anon_username": None,
         "anon_avatar_url": None,
         "anon_tag": "Response",
+        # react to contact
+        "react_to_contact_message": None,
+        "react_to_contact_emoji": "\u2705",
+        # confirm thread creation
+        "confirm_thread_creation": False,
+        "confirm_thread_creation_title": "Confirm thread creation",
+        "confirm_thread_response": "React to confirm thread creation which will directly contact the moderators",
+        "confirm_thread_creation_accept": "\u2705",
+        "confirm_thread_creation_deny": "\U0001F6AB",
+        # regex
+        "use_regex_autotrigger": False,
     }
 
     private_keys = {
@@ -81,12 +104,11 @@ class ConfigManager:
         "activity_message": "",
         "activity_type": None,
         "status": None,
-        # dm_disabled 0 = none, 1 = new threads, 2 = all threads
-        # TODO: use enum
-        "dm_disabled": 0,
+        "dm_disabled": DMDisabled.NONE,
         "oauth_whitelist": [],
         # moderation
         "blocked": {},
+        "blocked_roles": {},
         "blocked_whitelist": [],
         "command_permissions": {},
         "level_permissions": {},
@@ -99,6 +121,7 @@ class ConfigManager:
         # misc
         "plugins": [],
         "aliases": {},
+        "auto_triggers": {},
     }
 
     protected_keys = {
@@ -117,8 +140,11 @@ class ConfigManager:
         "enable_eval": True,
         # github access token for private repositories
         "github_token": None,
+        "disable_autoupdates": False,
         # Logging
         "log_level": "INFO",
+        # data collection
+        "data_collection": True,
     }
 
     colors = {"mod_color", "recipient_color", "main_color", "error_color"}
@@ -130,14 +156,31 @@ class ConfigManager:
         "mod_typing",
         "reply_without_command",
         "anon_reply_without_command",
+        "plain_reply_without_command",
         "recipient_thread_close",
         "thread_auto_close_silently",
         "thread_move_notify",
+        "thread_move_notify_mods",
+        "transfer_reactions",
+        "close_on_leave",
+        "alert_on_mention",
+        "show_timestamp",
+        "confirm_thread_creation",
+        "use_regex_autotrigger",
         "enable_plugins",
+        "data_collection",
         "enable_eval",
+        "disable_autoupdates",
+        "thread_contact_silently",
     }
 
-    special_types = {"status", "activity_type"}
+    enums = {
+        "dm_disabled": DMDisabled,
+        "status": discord.Status,
+        "activity_type": discord.ActivityType,
+    }
+
+    force_str = {"command_permissions", "level_permissions"}
 
     defaults = {**public_keys, **private_keys, **protected_keys}
     all_keys = set(defaults.keys())
@@ -209,18 +252,19 @@ class ConfigManager:
         self._cache[key] = item
 
     def __getitem__(self, key: str) -> typing.Any:
-        key = key.lower()
-        if key not in self.all_keys:
-            raise InvalidConfigError(f'Configuration "{key}" is invalid.')
-        if key not in self._cache:
-            self._cache[key] = deepcopy(self.defaults[key])
-        return self._cache[key]
+        # make use of the custom methods in func:get:
+        return self.get(key)
 
     def __delitem__(self, key: str) -> None:
         return self.remove(key)
 
     def get(self, key: str, convert=True) -> typing.Any:
-        value = self.__getitem__(key)
+        key = key.lower()
+        if key not in self.all_keys:
+            raise InvalidConfigError(f'Configuration "{key}" is invalid.')
+        if key not in self._cache:
+            self._cache[key] = deepcopy(self.defaults[key])
+        value = self._cache[key]
 
         if not convert:
             return value
@@ -250,25 +294,36 @@ class ConfigManager:
             except ValueError:
                 value = self.remove(key)
 
-        elif key in self.special_types:
+        elif key in self.enums:
             if value is None:
                 return None
+            try:
+                value = self.enums[key](value)
+            except ValueError:
+                logger.warning("Invalid %s %s.", key, value)
+                value = self.remove(key)
 
-            if key == "status":
-                try:
-                    # noinspection PyArgumentList
-                    value = discord.Status(value)
-                except ValueError:
-                    logger.warning("Invalid status %s.", value)
-                    value = self.remove(key)
+        elif key in self.force_str:
+            # Temporary: as we saved in int previously, leading to int32 overflow,
+            #            this is transitioning IDs to strings
+            new_value = {}
+            changed = False
+            for k, v in value.items():
+                new_v = v
+                if isinstance(v, list):
+                    new_v = []
+                    for n in v:
+                        if n != -1 and not isinstance(n, str):
+                            changed = True
+                            n = str(n)
+                        new_v.append(n)
+                new_value[k] = new_v
 
-            elif key == "activity_type":
-                try:
-                    # noinspection PyArgumentList
-                    value = discord.ActivityType(value)
-                except ValueError:
-                    logger.warning("Invalid activity %s.", value)
-                    value = self.remove(key)
+            if changed:
+                # transition the database as well
+                self.set(key, new_value)
+
+            value = new_value
 
         return value
 
@@ -327,8 +382,10 @@ class ConfigManager:
             except ValueError:
                 raise InvalidConfigError("Must be a yes/no value.")
 
-        # elif key in self.special_types:
-        #     if key == "status":
+        elif key in self.enums:
+            if isinstance(item, self.enums[key]):
+                # value is an enum type
+                item = item.value
 
         return self.__setitem__(key, item)
 

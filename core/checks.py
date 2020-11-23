@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from core.models import PermissionLevel, getLogger
+from core.models import HostingMethod, PermissionLevel, getLogger
 
 logger = getLogger(__name__)
 
@@ -62,7 +62,7 @@ async def check_permissions(ctx, command_name) -> bool:
     if command_name in command_permissions:
         # -1 is for @everyone
         return -1 in command_permissions[command_name] or any(
-            check.id in command_permissions[command_name] for check in checkables
+            str(check.id) in command_permissions[command_name] for check in checkables
         )
 
     level_permissions = ctx.bot.config["level_permissions"]
@@ -71,7 +71,7 @@ async def check_permissions(ctx, command_name) -> bool:
         if level >= permission_level and level.name in level_permissions:
             # -1 is for @everyone
             if -1 in level_permissions[level.name] or any(
-                check.id in level_permissions[level.name] for check in checkables
+                str(check.id) in level_permissions[level.name] for check in checkables
             ):
                 return True
     return False
@@ -99,4 +99,24 @@ def thread_only():
         return ctx.thread is not None
 
     predicate.fail_msg = "This is not a Modmail thread."
+    return commands.check(predicate)
+
+
+def github_token_required(ignore_if_not_heroku=False):
+    """
+    A decorator that ensures github token
+    is set
+    """
+
+    async def predicate(ctx):
+        if ignore_if_not_heroku and ctx.bot.hosting_method != HostingMethod.HEROKU:
+            return True
+        else:
+            return ctx.bot.config.get("github_token")
+
+    predicate.fail_msg = (
+        "You can only use this command if you have a "
+        "configured `GITHUB_TOKEN`. Get a "
+        "personal access token from developer settings."
+    )
     return commands.check(predicate)
